@@ -3,17 +3,36 @@
 #include <chaiscript/chaiscript.hpp>
 
 #include <TmxMap.h>
+#include <TmxColor.h>
 
-using namespace Tmx;
+using Tmx::Color;
+using Tmx::Map;
 
 namespace chaiscript {
   namespace extras {
     namespace tmxparser {
 
+      ModulePtr addColor(ModulePtr m = std::make_shared<Module>()) {
+        m->add(user_type<Color>(), "TmxColor");
+        m->add(constructor<Color()>(), "TmxColor");
+        m->add(constructor<Color(uint32_t)>(), "TmxColor");
+        m->add(constructor<Color(uint8_t, uint8_t, uint8_t, uint8_t)>(), "TmxColor");
+        m->add(constructor<Color(const std::string&)>(), "TmxColor");
+        m->add(fun(&Color::GetAlpha), "GetAlpha");
+        m->add(fun(&Color::GetRed), "GetRed");
+        m->add(fun(&Color::GetGreen), "GetGreen");
+        m->add(fun(&Color::GetBlue), "GetBlue");
+        m->add(fun(&Color::IsTransparent), "IsTransparent");
+        m->add(fun(&Color::ToInt), "ToInt");
+        m->add(fun(&Color::ToString), "ToString");
+
+        return m;
+      }
+
       /**
        * Adds the Map to the ChaiScript module.
        */
-      ModulePtr addMap(ModulePtr m) {
+      ModulePtr addMap(ModulePtr m = std::make_shared<Module>()) {
         m->add(user_type<Map>(), "TmxMap");
         m->add(constructor<Map()>(), "TmxMap");
         m->add(fun(&Map::ParseFile), "ParseFile");
@@ -36,9 +55,9 @@ namespace chaiscript {
         m->add(fun(&Map::GetNumTilesets), "GetNumTilesets");
         m->add(fun(&Map::HasError), "HasError");
         m->add(fun(&Map::GetErrorCode), "GetErrorCode");
+        m->add(fun(&Map::GetBackgroundColor), "GetBackgroundColor");
 
         // TODO: Add the remaining functions.
-        //Tmx::Color GetBackgroundColor()
         //Tmx::MapOrientation GetOrientation()
         //Tmx::MapRenderOrder GetRenderOrder() const { return render_order; }
         //Tmx::MapStaggerAxis GetStaggerAxis() const { return stagger_axis; }
@@ -67,6 +86,7 @@ namespace chaiscript {
        */
       ModulePtr bootstrap(ModulePtr m = std::make_shared<Module>())
       {
+        addColor(m);
         addMap(m);
 
         return m;

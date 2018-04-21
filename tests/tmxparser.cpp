@@ -19,15 +19,22 @@ TEST_CASE( "TmxParser functions work", "[tmxparser]" ) {
   // Add the library to the ChaiScript instance.
   chai.add(tmxparserlib);
 
+  // Map tests.
   chai.eval(R""(
     global map = TmxMap();
   )"");
 
-  // Run all the tests.
   chai.eval(R""(
     map.ParseFile("../tests/Resources/map.tmx");
   )"");
 
-  int width = chai.eval<int>("map.GetWidth()");
-  CHECK(width == 10);
+  CHECK(chai.eval<int>("map.GetWidth()") == 10);
+
+  // Color
+  chai.eval(R""(
+    global col = map.GetBackgroundColor();
+  )"");
+
+  CHECK(chai.eval<std::string>("col.ToString()") == "#00000000");
+
 }
