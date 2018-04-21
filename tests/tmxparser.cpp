@@ -20,12 +20,12 @@ TEST_CASE( "TmxParser functions work", "[tmxparser]" ) {
   chai.add(tmxparserlib);
 
   chai.eval(R""(
-    var map = TmxMap();
+    global map = TmxMap();
   )"");
 
   // Run all the tests.
   chai.eval(R""(
-    map.ParseFile("tests/Resources/map.tmx");
+    map.ParseFile("../tests/Resources/map.tmx");
   )"");
 
   int width = chai.eval<int>("map.GetWidth()");
