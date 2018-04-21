@@ -11,6 +11,30 @@ namespace chaiscript {
   namespace extras {
     namespace tmxparser {
 
+      ModulePtr addLayer(ModulePtr m = std::make_shared<Module>()) {
+        // LayerType
+        m->add_global_const(const_var(TMX_LAYERTYPE_TILE), "TMX_LAYERTYPE_TILE");
+        m->add_global_const(const_var(TMX_LAYERTYPE_OBJECTGROUP), "TMX_LAYERTYPE_OBJECTGROUP");
+        m->add_global_const(const_var(TMX_LAYERTYPE_IMAGE_LAYER), "TMX_LAYERTYPE_IMAGE_LAYER");
+        m->add_global_const(const_var(TMX_LAYERTYPE_GROUP_LAYER), "TMX_LAYERTYPE_GROUP_LAYER");
+
+        // Layer
+        m->add(user_type<Layer>(), "TmxLayer");
+        m->add(fun(&Layer::mapGetMap), "mapGetMap");
+        m->add(fun(&Layer::GetName), "GetName");
+        m->add(fun(&Layer::GetX), "GetX");
+        m->add(fun(&Layer::GetY), "GetY");
+        m->add(fun(&Layer::GetWidth), "GetWidth");
+        m->add(fun(&Layer::GetHeight), "GetHeight");
+        m->add(fun(&Layer::GetOpacity), "GetOpacity");
+        m->add(fun(&Layer::IsVisible), "IsVisible");
+        m->add(fun(&Layer::GetProperties), "GetProperties");
+        m->add(fun(&Layer::GetZOrder), "GetZOrder");
+        m->add(fun(&Layer::SetZOrder), "SetZOrder");
+        m->add(fun(&Layer::GetParseOrder), "GetParseOrder");
+        m->add(fun(&Layer::GetLayerType), "GetLayerType");
+      }
+
       ModulePtr addMapEnums(ModulePtr m = std::make_shared<Module>()) {
         // MapError
         m->add_global_const(const_var(TMX_COULDNT_OPEN), "TMX_COULDNT_OPEN");
@@ -91,10 +115,11 @@ namespace chaiscript {
         m->add(fun(&Map::GetRenderOrder), "GetRenderOrder");
         m->add(fun(&Map::GetStaggerAxis), "GetStaggerAxis");
         m->add(fun(&Map::GetStaggerIndex), "GetStaggerIndex");
+        m->add(fun(&Map::GetLayer), "GetLayer");
+        m->add(bootstrap::standard_library::vector_type<std::vector<Layer*>>("VectorTmxLayer"));
+        m->add(fun(&Map::GetLayers), "GetLayers");
 
         // TODO: Add the remaining functions.
-        //const Tmx::Layer *GetLayer(int index) const { return layers.at(index); }
-        //const std::vector< Tmx::Layer* > &GetLayers() const { return layers; }
         //const Tmx::TileLayer *GetTileLayer(int index) const { return tile_layers.at(index); }
         //const std::vector< Tmx::TileLayer* > &GetTileLayers() const { return tile_layers; }
         //const Tmx::ObjectGroup *GetObjectGroup(int index) const { return object_groups.at(index); }
@@ -117,6 +142,7 @@ namespace chaiscript {
        */
       ModulePtr bootstrap(ModulePtr m = std::make_shared<Module>())
       {
+        addLayer(m);
         addColor(m);
         addMap(m);
 
