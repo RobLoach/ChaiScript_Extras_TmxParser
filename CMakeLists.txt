@@ -221,6 +221,20 @@ if ( ZLIB_FOUND )
     target_link_libraries( tmxparser_test ${ZLIB_LIBRARIES} )
 endif( ZLIB_FOUND )
 
+# TinyXML2
+find_package(TINYXML2 REQUIRED)
+if (TINYXML2_FOUND)
+    include_directories(${TINYXML2_INCLUDE_DIRS})
+    set(LIBS ${LIBS} ${TINYXML2_LIBRARIES})
+endif (TINYXML2_FOUND)
+
+# TmxParser
+find_package(TMXPARSER REQUIRED)
+if (TMXPARSER_FOUND)
+    include_directories(${TMXPARSER_INCLUDE_DIRS})
+    set(LIBS ${LIBS} ${TMXPARSER_LIBRARIES})
+endif (TMXPARSER_FOUND)
+
 # TmxParser Demo
 add_executable(tmxparser_test tests/TmxParser.cpp)
 target_link_libraries(tmxparser_test ${LIBS})
