@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-project(chaiscript_extras_http)
+project(chaiscript_extras_tmxparser)
 
 # MINGW does not yet support C++11's concurrency features
 if(MINGW)
@@ -214,6 +214,18 @@ macro(ADD_CATCH_TESTS executable)
   endforeach()
 endmacro()
 
+file(GLOB SOURCES
+  tests/tmxparser.cpp
+  vendor/tinyxml2/tinyxml2.cpp
+  vendor/tmxparser/src/*.cpp
+  vendor/tmxparser/src/base64/*.cpp
+)
+
+include_directories( vendor/tinyxml2 vendor/tmxparser/src )
+
+# TmxParser Demo
+add_executable(tmxparser_test ${SOURCES})
+
 # zlib
 find_package( ZLIB REQUIRED )
 if ( ZLIB_FOUND )
@@ -221,21 +233,5 @@ if ( ZLIB_FOUND )
     target_link_libraries( tmxparser_test ${ZLIB_LIBRARIES} )
 endif( ZLIB_FOUND )
 
-# TinyXML2
-find_package(TINYXML2 REQUIRED)
-if (TINYXML2_FOUND)
-    include_directories(${TINYXML2_INCLUDE_DIRS})
-    set(LIBS ${LIBS} ${TINYXML2_LIBRARIES})
-endif (TINYXML2_FOUND)
-
-# TmxParser
-find_package(TMXPARSER REQUIRED)
-if (TMXPARSER_FOUND)
-    include_directories(${TMXPARSER_INCLUDE_DIRS})
-    set(LIBS ${LIBS} ${TMXPARSER_LIBRARIES})
-endif (TMXPARSER_FOUND)
-
-# TmxParser Demo
-add_executable(tmxparser_test tests/TmxParser.cpp)
 target_link_libraries(tmxparser_test ${LIBS})
 ADD_CATCH_TESTS(tmxparser_test)

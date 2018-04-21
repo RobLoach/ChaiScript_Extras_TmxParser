@@ -5,13 +5,13 @@
 #include <chaiscript/chaiscript.hpp>
 
 /**
- * Load the HTTP library.
+ * Load the TmxParser library.
  */
 #include "../include/chaiscript/extras/tmxparser.hpp"
 
-TEST_CASE( "TmxParser functions work", "[http]" ) {
-  // Build the library.
-  auto tmxparserlib = chaiscript::extras::http::bootstrap();
+TEST_CASE( "TmxParser functions work", "[tmxparser]" ) {
+
+  auto tmxparserlib = chaiscript::extras::tmxparser::bootstrap();
   
   // Create the ChaiScript environment.
   chaiscript::ChaiScript chai;
@@ -19,11 +19,13 @@ TEST_CASE( "TmxParser functions work", "[http]" ) {
   // Add the library to the ChaiScript instance.
   chai.add(tmxparserlib);
 
+  chai.eval(R""(
+    var map = TmxMap();
+  )"");
+
   // Run all the tests.
   chai.eval(R""(
-    var map = TmxMap()
-
-    map.ParseFile("tests/Resources/map.tmx")
+    map.ParseFile("tests/Resources/map.tmx");
   )"");
 
   int width = chai.eval<int>("map.GetWidth()");
