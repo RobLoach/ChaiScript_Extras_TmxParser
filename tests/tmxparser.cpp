@@ -3,6 +3,8 @@
 #include "catch.hpp"
 
 #include <chaiscript/chaiscript.hpp>
+#include <TmxMap.h>
+using namespace Tmx;
 
 /**
  * Load the TmxParser library.
@@ -37,4 +39,7 @@ TEST_CASE( "TmxParser functions work", "[tmxparser]" ) {
 
   CHECK(chai.eval<std::string>("col.ToString()") == "#00000000");
 
+  // Enums
+  CHECK(chai.eval<MapError>("TMX_COULDNT_OPEN") == TMX_COULDNT_OPEN);
+  CHECK(chai.eval<MapOrientation>("map.GetOrientation()") == TMX_MO_ORTHOGONAL);
 }

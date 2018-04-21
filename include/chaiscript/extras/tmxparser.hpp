@@ -5,12 +5,42 @@
 #include <TmxMap.h>
 #include <TmxColor.h>
 
-using Tmx::Color;
-using Tmx::Map;
+using namespace Tmx;
 
 namespace chaiscript {
   namespace extras {
     namespace tmxparser {
+
+      ModulePtr addMapEnums(ModulePtr m = std::make_shared<Module>()) {
+        // MapError
+        m->add_global_const(const_var(TMX_COULDNT_OPEN), "TMX_COULDNT_OPEN");
+        m->add_global_const(const_var(TMX_PARSING_ERROR), "TMX_PARSING_ERROR");
+        m->add_global_const(const_var(TMX_INVALID_FILE_SIZE), "TMX_INVALID_FILE_SIZE");
+
+        // MapOrientation
+        m->add_global_const(const_var(TMX_MO_ORTHOGONAL), "TMX_MO_ORTHOGONAL");
+        m->add_global_const(const_var(TMX_MO_ISOMETRIC), "TMX_MO_ISOMETRIC");
+        m->add_global_const(const_var(TMX_MO_STAGGERED), "TMX_MO_STAGGERED");
+        m->add_global_const(const_var(TMX_MO_HEXAGONAL), "TMX_MO_HEXAGONAL");
+
+        // MapRenderOrder
+        m->add_global_const(const_var(TMX_RIGHT_DOWN), "TMX_RIGHT_DOWN");
+        m->add_global_const(const_var(TMX_RIGHT_UP), "TMX_RIGHT_UP");
+        m->add_global_const(const_var(TMX_LEFT_DOWN), "TMX_LEFT_DOWN");
+        m->add_global_const(const_var(TMX_LEFT_UP), "TMX_LEFT_UP");
+
+        // MapStaggerAxis
+        m->add_global_const(const_var(TMX_SA_NONE), "TMX_SA_NONE");
+        m->add_global_const(const_var(TMX_SA_X), "TMX_SA_X");
+        m->add_global_const(const_var(TMX_SA_Y), "TMX_SA_Y");
+
+        // MapStaggerIndex
+        m->add_global_const(const_var(TMX_SI_NONE), "TMX_SI_NONE");
+        m->add_global_const(const_var(TMX_SI_EVEN), "TMX_SI_EVEN");
+        m->add_global_const(const_var(TMX_SI_ODD), "TMX_SI_ODD");
+
+        return m;
+      }
 
       ModulePtr addColor(ModulePtr m = std::make_shared<Module>()) {
         m->add(user_type<Color>(), "TmxColor");
@@ -33,6 +63,7 @@ namespace chaiscript {
        * Adds the Map to the ChaiScript module.
        */
       ModulePtr addMap(ModulePtr m = std::make_shared<Module>()) {
+        addMapEnums(m);
         m->add(user_type<Map>(), "TmxMap");
         m->add(constructor<Map()>(), "TmxMap");
         m->add(fun(&Map::ParseFile), "ParseFile");
@@ -56,12 +87,12 @@ namespace chaiscript {
         m->add(fun(&Map::HasError), "HasError");
         m->add(fun(&Map::GetErrorCode), "GetErrorCode");
         m->add(fun(&Map::GetBackgroundColor), "GetBackgroundColor");
+        m->add(fun(&Map::GetOrientation), "GetOrientation");
+        m->add(fun(&Map::GetRenderOrder), "GetRenderOrder");
+        m->add(fun(&Map::GetStaggerAxis), "GetStaggerAxis");
+        m->add(fun(&Map::GetStaggerIndex), "GetStaggerIndex");
 
         // TODO: Add the remaining functions.
-        //Tmx::MapOrientation GetOrientation()
-        //Tmx::MapRenderOrder GetRenderOrder() const { return render_order; }
-        //Tmx::MapStaggerAxis GetStaggerAxis() const { return stagger_axis; }
-        //Tmx::MapStaggerIndex GetStaggerIndex() const { return stagger_index; }
         //const Tmx::Layer *GetLayer(int index) const { return layers.at(index); }
         //const std::vector< Tmx::Layer* > &GetLayers() const { return layers; }
         //const Tmx::TileLayer *GetTileLayer(int index) const { return tile_layers.at(index); }
